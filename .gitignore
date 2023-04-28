@@ -1,6 +1,8 @@
 # Large files
 openwpm/datadir/tranco_100_wrong.sqlite
 openwpm/datadir/tranco_100.sqlite
+openwpm/jellybeans_leakage/_trash_bin/many_joins_leakage.sqlite
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
