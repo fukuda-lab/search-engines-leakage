@@ -1,3 +1,8 @@
+"""
+This file is a modified version of the openwpm demo.py.
+It is used to crawl the top 15 search engines for the query "JELLYBEANS" and store the results in a SQLite database:
+"""
+
 import argparse
 from pathlib import Path
 
@@ -76,6 +81,7 @@ manager_params.log_path = Path("./datadir/openwpm.log")
 with TaskManager(
     manager_params,
     browser_params,
+    # Not sure if this will work correctly, but ideally this should save the .sqlite file to the experiment directory
     SQLiteStorageProvider(Path("./datadir/jellybeans_leakage_15_crawl.sqlite")),
     None,
 ) as manager:
@@ -84,7 +90,8 @@ with TaskManager(
 
         def callback(success: bool, val: str = site) -> None:
             print(
-                f"CommandSequence for {val} ran {'successfully' if success else 'unsuccessfully'}"
+                f"CommandSequence for {val} ran"
+                f" {'successfully' if success else 'unsuccessfully'}"
             )
 
         # Parallelize sites over all number of browsers set above.
