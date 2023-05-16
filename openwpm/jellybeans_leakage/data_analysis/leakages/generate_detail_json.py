@@ -1,11 +1,14 @@
 """ This script generates a JSON file with the details of the leakages organized by leakage type and site URL. """
 
+import base64
 from pathlib import Path
 import sqlite3
 import json
 from collections import defaultdict
 from sqlite import LeakagesDetailsQueryBySiteURL
-from ..keyword_encoding import get_keyword_encodings
+from ..keyword_encodings import Encodings
+
+# from ..keyword_encoding import get_keyword_encodings
 import utils
 
 # TODO: Move this to a setting variable for the whole project
@@ -27,8 +30,8 @@ SITES = [
     "https://swisscows.com/web?query=JELLYBEANS",
 ]
 
-SEARCH_TERM = "JELLYBEANS"
-search_term_encodings = get_keyword_encodings(SEARCH_TERM)
+SEARCH_TERMS = ["JELLYBEANS", "jellybeans"]
+SEARCH_TERM_ENCODINGS = Encodings(SEARCH_TERMS)
 
 # We are running this script standing in jellybeans_leakage/data_analysis directory
 LEAKAGE_DATA_PATH = Path("leakages/sqlite/leakage_data.sqlite")
@@ -65,7 +68,7 @@ for site_url in SITES:
     http_requests_leakages = conn.execute(SITE_QUERIES.HTTPRequests).fetchall()
     for row in http_requests_leakages:
         leakage_list_element = utils.get_processed_http_leakage(
-            row, search_term_encodings
+            row, SEARCH_TERM_ENCODINGS
         )
         leakage_details["http_requests_leakages"][site_url].append(leakage_list_element)
 

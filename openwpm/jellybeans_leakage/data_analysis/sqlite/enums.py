@@ -90,8 +90,8 @@ class LeakageTableCreationCommand(StrEnum):
         is_third_party_to_top_window INTEGER,
         is_XHR INTEGER,
         encoding TEXT,
-        top_level_url_etld_plus_one TEXT,
-        request_url_etld_plus_one TEXT
+        top_level_url_second_level_domain TEXT,
+        request_url_second_level_domain TEXT
     );
     """
 

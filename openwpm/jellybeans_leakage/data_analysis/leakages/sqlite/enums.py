@@ -113,8 +113,8 @@ class LeakagesDetailsQueryBySiteURL:
             "        encoding, "
             "        is_third_party_channel, "
             "        is_third_party_to_top_window, "
-            "        top_level_url_etld_plus_one, "
-            "        request_url_etld_plus_one "
+            "        top_level_url_second_level_domain, "
+            "        request_url_second_level_domain "
             "FROM http_requests_leakage_data "
             f"WHERE site_url = '{self.site_url}'; "
         )
