@@ -7,7 +7,7 @@ import base64
 import sqlite3
 import pandas as pd
 from pathlib import Path
-from keyword_encodings import Encodings
+from leakages.keyword_encodings import Encodings
 import tldextract
 from sqlite import (
     CrawledDataQuery,
@@ -20,7 +20,7 @@ from sqlite import (
 CRAWL_DATA_PATH = Path("sqlite/crawl_results.sqlite")
 LEAKAGE_DATA_PATH = Path("leakages/sqlite/leakage_data.sqlite")
 SEARCH_TERMS = ["JELLYBEANS", "jellybeans"]
-SEARCH_TERM_ENCODINGS = Encodings(SEARCH_TERMS)
+SEARCH_TERMS_ENCODINGS = Encodings(SEARCH_TERMS)
 
 
 def search_leakage(
@@ -32,7 +32,7 @@ def search_leakage(
     # Traverse all encodings
     for keyword in SEARCH_TERMS:
         # TODO: If found, add the actual keyword (lowercase or uppercase) to the leakage table
-        for encoding_name, encoded_term in SEARCH_TERM_ENCODINGS.encodings[
+        for encoding_name, encoded_term in SEARCH_TERMS_ENCODINGS.encodings[
             keyword
         ].items():
             # Filter the table_df to only contain the requests made to third parties

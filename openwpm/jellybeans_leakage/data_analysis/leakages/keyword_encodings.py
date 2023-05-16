@@ -8,35 +8,6 @@ import zlib
 from crccheck.crc import Crc16, Crc32
 from Crypto.Hash import RIPEMD160
 
-ENCODING_NAMES = [
-    "original",  # 0
-    "base16",  # 1
-    "base32",  # 2
-    "base32hex",  # 3
-    "base58",  # 4
-    "base64",  # 5
-    "gzip",  # 6
-    "bzip2",  # 7
-    "deflate",  # 8
-    "md5",  # 9
-    "sha1",  # 10
-    "sha224",  # 11
-    "sha256",  # 12
-    "sha384",  # 13
-    "sha512",  # 14
-    "sha3_224",  # 15
-    "sha3_256",  # 16
-    "sha3_384",  # 17
-    "sha3_512",  # 18
-    "blake2s",  # 19
-    "blake2b",  # 20
-    "ripemd_160",  # 21
-    "crc16",  # 22
-    "crc32",  # 23
-    "adler32",  # 24
-    "rot13",  # 25
-]
-
 
 class Encodings:
     def __init__(self, search_terms):
@@ -117,21 +88,56 @@ class Encodings:
         )  # Most common and the only one with a working library found yet, missing 128, 250 and 320
 
         # Checksums (false-positive risky)
-        encodings["crc16"] = str(Crc16.calc(utf_8_encoded_keyword))  # ?
+        encodings["crc16"] = str(
+            Crc16.calc(utf_8_encoded_keyword)
+        )  # Not sure about this one
+
         encodings["crc32"] = str(
             zlib.crc32(utf_8_encoded_keyword)
         )  # According to the official zlib docs, from 3.0, the result is always unsigned
         # encodings.append(str(Crc32.calc(utf_8_encoded_keyword))) # Another way to calculate CRC32
+
         encodings["adler32"] = str(
             zlib.adler32(utf_8_encoded_keyword)
         )  # According to the official zlib docs, from 3.0, the result is always unsigned
 
         # Other encodings
-        encodings["rot13"] = codecs.encode(keyword, "rot_13")  # ?
+        encodings["rot13"] = codecs.encode(keyword, "rot_13")  # Not sure about this one
         return encodings
 
 
-# BEFORE MANUALLY CHECKING
+# ACTUAL "WORKING" ENCODINGS
+# ENCODING_NAMES = [
+#     "original",  # 0
+#     "base16",  # 1
+#     "base32",  # 2
+#     "base32hex",  # 3
+#     "base58",  # 4
+#     "base64",  # 5
+#     "gzip",  # 6
+#     "bzip2",  # 7
+#     "deflate",  # 8
+#     "md5",  # 9
+#     "sha1",  # 10
+#     "sha224",  # 11
+#     "sha256",  # 12
+#     "sha384",  # 13
+#     "sha512",  # 14
+#     "sha3_224",  # 15
+#     "sha3_256",  # 16
+#     "sha3_384",  # 17
+#     "sha3_512",  # 18
+#     "blake2s",  # 19
+#     "blake2b",  # 20
+#     "ripemd_160",  # 21
+#     "crc16",  # 22
+#     "crc32",  # 23
+#     "adler32",  # 24
+#     "rot13",  # 25
+# ]
+
+
+# BEFORE MANUALLY RE CHECKING NAMES
 # ENCODING_NAMES = [
 #     "original",  # 0
 #     "base16",  # 1

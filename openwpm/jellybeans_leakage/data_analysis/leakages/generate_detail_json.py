@@ -6,9 +6,7 @@ import sqlite3
 import json
 from collections import defaultdict
 from sqlite import LeakagesDetailsQueryBySiteURL
-from ..keyword_encodings import Encodings
-
-# from ..keyword_encoding import get_keyword_encodings
+from keyword_encodings import Encodings
 import utils
 
 # TODO: Move this to a setting variable for the whole project
@@ -30,8 +28,10 @@ SITES = [
     "https://swisscows.com/web?query=JELLYBEANS",
 ]
 
+# Search Terms Object
 SEARCH_TERMS = ["JELLYBEANS", "jellybeans"]
-SEARCH_TERM_ENCODINGS = Encodings(SEARCH_TERMS)
+SEARCH_TERMS_ENCODINGS = Encodings(SEARCH_TERMS)
+
 
 # We are running this script standing in jellybeans_leakage/data_analysis directory
 LEAKAGE_DATA_PATH = Path("leakages/sqlite/leakage_data.sqlite")
@@ -68,7 +68,7 @@ for site_url in SITES:
     http_requests_leakages = conn.execute(SITE_QUERIES.HTTPRequests).fetchall()
     for row in http_requests_leakages:
         leakage_list_element = utils.get_processed_http_leakage(
-            row, SEARCH_TERM_ENCODINGS
+            row, SEARCH_TERMS_ENCODINGS
         )
         leakage_details["http_requests_leakages"][site_url].append(leakage_list_element)
 

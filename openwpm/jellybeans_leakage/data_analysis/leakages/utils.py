@@ -1,7 +1,7 @@
 """ Some utility functions to have tidier code """
 
 
-from jellybeans_leakage.data_analysis.keyword_encodings import Encodings
+from keyword_encodings import Encodings
 
 
 def get_processed_cookie_leakage(row):
@@ -98,14 +98,14 @@ def get_processed_http_leakage(row, search_terms_object: Encodings):
 
     # Complete the explicit leakage info only where it appears
     for keyword in search_terms_object.search_terms:
-        for term in search_terms_object[keyword].values():
-            if term.lower() in (referrer or "").lower():
+        for term in search_terms_object.encodings[keyword].values():
+            if term in (referrer or ""):
                 http_list_element["explicit_leakage"]["referrer"] = referrer
-            if term.lower() in (headers or "").lower():
+            if term in (headers or ""):
                 http_list_element["explicit_leakage"]["headers"] = headers
-            if term.lower() in (post_body or "").lower():
+            if term in (post_body or ""):
                 http_list_element["explicit_leakage"]["post_body"] = post_body
-            if term.lower() in (post_body_raw or "").lower():
+            if term in (post_body_raw or ""):
                 http_list_element["explicit_leakage"]["post_body_raw"] = post_body_raw
 
     return http_list_element
