@@ -1,5 +1,4 @@
 """ This file is used to search for the actual leakages in the crawled data (HTTP requests, JavaScripts, and Cookies).
-
 If we were to have perfomance issues, we could consider adding the eTLD+1's to the crawl_data database schema and save them at crawling time, so we can make the filtering in the SQL query in stead of relying on pandas dataframe.
 """
 
@@ -12,14 +11,16 @@ import tldextract
 from sqlite import (
     CrawledDataQuery,
     LeakageTableCreationCommand,
+    LeakageDropTableCommand,
     LeakageDataQueries,
     ColumnsToSearch,
     LeakageTableNames,
 )
 
-CRAWL_DATA_PATH = Path("sqlite/crawl_results.sqlite")
+CRAWL_DATA_PATH = Path("sqlite/[vpn_czech]10_crawls_results.sqlite")
+# CRAWL_DATA_PATH = Path("sqlite/1_crawl_results.sqlite")
 LEAKAGE_DATA_PATH = Path("leakages/sqlite/leakage_data.sqlite")
-SEARCH_TERMS = ["JELLYBEANS", "jellybeans"]
+SEARCH_TERMS = ["JELLYBEANS"]
 SEARCH_TERMS_ENCODINGS = Encodings(SEARCH_TERMS)
 
 
@@ -29,48 +30,56 @@ def search_leakage(
     """Evaluates the existence of leakage in a given column among all of the entries of the given table_df.
     The criteria used is Second-Level Domain difference."""
 
-    # Traverse all encodings
-    for keyword in SEARCH_TERMS:
-        # TODO: If found, add the actual keyword (lowercase or uppercase) to the leakage table
-        for encoding_name, encoded_term in SEARCH_TERMS_ENCODINGS.encodings[
-            keyword
-        ].items():
-            # Filter the table_df to only contain the requests made to third parties
+    # Traverse all search_terms (just one for now)
+    for keyword in SEARCH_TERMS_ENCODINGS.search_terms:
+        # Traverse original and lowercase
+        for keyword_case in SEARCH_TERMS_ENCODINGS.encodings[keyword].keys():
+            # Traverse all encodings for the current search term and case
+            for encoding_name, encoded_term in SEARCH_TERMS_ENCODINGS.encodings[
+                keyword
+            ][keyword_case].items():
+                # Filter the table_df to only contain the requests made to third parties
 
-            if table_name == LeakageTableNames.HTTP_REQUESTS:
-                # http_requests the leakage criteria is strict Second Level Domain matching
-                table_df["top_level_url_second_level_domain"] = table_df[
-                    "top_level_url"
-                ].apply(lambda url: tldextract.extract(url).domain)
-                table_df["request_url_second_level_domain"] = table_df["url"].apply(
-                    lambda url: tldextract.extract(url).domain
+                if table_name == LeakageTableNames.HTTP_REQUESTS:
+                    # http_requests the leakage criteria is strict Second Level Domain matching
+                    table_df["top_level_url_second_level_domain"] = table_df[
+                        "top_level_url"
+                    ].apply(lambda url: tldextract.extract(url).domain)
+                    table_df["request_url_second_level_domain"] = table_df["url"].apply(
+                        lambda url: tldextract.extract(url).domain
+                    )
+
+                    # Get a series of boolean values that indicate whether the request is to a third party
+                    requests_to_third_parties = (
+                        table_df["top_level_url_second_level_domain"]
+                        != table_df["request_url_second_level_domain"]
+                    )
+
+                    # Filter dataframe based on condition (using the series as a mask)
+                    table_df = table_df[requests_to_third_parties]
+
+                # TODO: Add the corresponding cases for JS and Cookies, after discussing my two questions from Slack
+
+                # Get a series of boolean True values for the rows that contain the search term with the actual evaluated encoding
+                leakages_index_series: pd.Series = table_df[column].str.contains(
+                    encoded_term,
+                    na=False,
+                    case=True,  # We are handling the casing in the SEARCH_TERMS_ENCODINGS, so we set this to True to avoid duplicates
                 )
-
-                # Get a series of boolean values that indicate whether the request is to a third party
-                requests_to_third_parties = (
-                    table_df["top_level_url_second_level_domain"]
-                    != table_df["request_url_second_level_domain"]
-                )
-
-                # Filter dataframe based on condition (using the series as a mask)
-                table_df = table_df[requests_to_third_parties]
-
-            # TODO: Add the corresponding cases for JS and Cookies, after discussing my two questions from Slack
-
-            # Get a series of boolean True values for the rows that contain the search term with the actual evaluated encoding
-            leakages_index_series: pd.Series = table_df[column].str.contains(
-                encoded_term, na=False, case=False
-            )
-            leakages = table_df[leakages_index_series]
-            if not leakages.empty:
-                print(
-                    f"Leakages found in {column} with search encoded_term:"
-                    f" {encoded_term}"
-                )
-                # Add the encoding and site_url to the leakages DataFrame
-                leakages["encoding"] = encoding_name
-                leakages["site_url"] = table_df["site_url"]
-                leakages.to_sql(table_name, conn_leak, if_exists="append", index=False)
+                leakages = table_df[leakages_index_series]
+                if not leakages.empty:
+                    print(
+                        f"Leakages found in {column} with search encoded_term:"
+                        f" {encoded_term}"
+                    )
+                    # Add the encoding and site_url to the leakages DataFrame
+                    if keyword_case == "lowercase":
+                        encoding_name = encoding_name + "_lowercase"
+                    leakages["encoding"] = encoding_name
+                    leakages["site_url"] = table_df["site_url"]
+                    leakages.to_sql(
+                        table_name, conn_leak, if_exists="append", index=False
+                    )
 
 
 # Connect to the SQLite database
@@ -87,6 +96,11 @@ javascript_cookies_data = pd.read_sql_query(CrawledDataQuery.COOKIES, conn)
 
 # Connect to the SQLite database for leakage data
 conn_leak = sqlite3.connect(LEAKAGE_DATA_PATH)
+
+# Drop previous leakage tables
+conn_leak.execute(LeakageDropTableCommand.HTTP_REQUESTS)
+conn_leak.execute(LeakageDropTableCommand.JS)
+conn_leak.execute(LeakageDropTableCommand.COOKIES)
 
 # Create leakage tables
 conn_leak.execute(LeakageTableCreationCommand.HTTP_REQUESTS)
@@ -133,6 +147,18 @@ with open("leakages/results/crawl_data_metrics.txt", "w") as output_file:
             query = query_info["query"]
             df = pd.read_sql_query(query, conn)
             output_file.write(df.to_string(index=False) + "\n\n")
+
+    # Write all the encodings used
+    output_file.write("Encodings used:\n")
+    for keyword in SEARCH_TERMS_ENCODINGS.search_terms:
+        output_file.write(f"Search term: {keyword}\n")
+        for keyword_case in SEARCH_TERMS_ENCODINGS.encodings[keyword].keys():
+            output_file.write(f"Keyword case: {keyword_case}\n")
+            for encoding_name, encoded_term in SEARCH_TERMS_ENCODINGS.encodings[
+                keyword
+            ][keyword_case].items():
+                output_file.write(f"{encoding_name}: {encoded_term}\n")
+            output_file.write("\n")
 
 conn.close()
 conn_leak.close()

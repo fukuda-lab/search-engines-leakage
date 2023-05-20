@@ -98,14 +98,17 @@ def get_processed_http_leakage(row, search_terms_object: Encodings):
 
     # Complete the explicit leakage info only where it appears
     for keyword in search_terms_object.search_terms:
-        for term in search_terms_object.encodings[keyword].values():
-            if term in (referrer or ""):
-                http_list_element["explicit_leakage"]["referrer"] = referrer
-            if term in (headers or ""):
-                http_list_element["explicit_leakage"]["headers"] = headers
-            if term in (post_body or ""):
-                http_list_element["explicit_leakage"]["post_body"] = post_body
-            if term in (post_body_raw or ""):
-                http_list_element["explicit_leakage"]["post_body_raw"] = post_body_raw
+        for case in search_terms_object.encodings[keyword].keys():
+            for term in search_terms_object.encodings[keyword][case].values():
+                if term in (referrer or ""):
+                    http_list_element["explicit_leakage"]["referrer"] = referrer
+                if term in (headers or ""):
+                    http_list_element["explicit_leakage"]["headers"] = headers
+                if term in (post_body or ""):
+                    http_list_element["explicit_leakage"]["post_body"] = post_body
+                if term in (post_body_raw or ""):
+                    http_list_element["explicit_leakage"][
+                        "post_body_raw"
+                    ] = post_body_raw
 
     return http_list_element

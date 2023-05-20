@@ -68,6 +68,20 @@ class LeakageTableNames(StrEnum):
     COOKIES = "javascript_cookies_leakage_data"
 
 
+class LeakageDropTableCommand(StrEnum):
+    HTTP_REQUESTS = """
+    DROP TABLE IF EXISTS http_requests_leakage_data;
+    """
+
+    JS = """
+    DROP TABLE IF EXISTS javascript_leakage_data;
+    """
+
+    COOKIES = """
+    DROP TABLE IF EXISTS javascript_cookies_leakage_data;
+    """
+
+
 class LeakageTableCreationCommand(StrEnum):
     """Enum class to store SQL commands to create leakage tables"""
 
@@ -164,7 +178,7 @@ class LeakageDataQueries(Enum):
                 {
                     "table_name": "http_requests",
                     "query": """
-                SELECT COUNT(DISTINCT request_id) as http_requests_captured
+                SELECT COUNT(*) as http_requests_captured
                 FROM http_requests;
                 """,
                 }
@@ -176,7 +190,7 @@ class LeakageDataQueries(Enum):
                 {
                     "table_name": "javascript",
                     "query": """
-                SELECT COUNT(DISTINCT id) as javascripts_captured
+                SELECT COUNT(*) as javascripts_captured
                 FROM javascript;
                 """,
                 }
@@ -188,7 +202,7 @@ class LeakageDataQueries(Enum):
                 {
                     "table_name": "javascript_cookies",
                     "query": """
-                SELECT COUNT(DISTINCT id) as cookies_captured
+                SELECT COUNT(*) as cookies_captured
                 FROM javascript_cookies;
                 """,
                 }

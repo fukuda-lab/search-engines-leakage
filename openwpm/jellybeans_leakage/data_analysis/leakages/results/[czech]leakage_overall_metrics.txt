@@ -1,0 +1,50 @@
+1. Total number of leakages found in each table:
+http_requests_leakage_data:
+ num_leakages
+          113
+
+javascript_leakage_data:
+ num_leakages
+          993
+
+javascript_cookies_leakage_data:
+ num_leakages
+           54
+
+2. Total leakages per table breakdown:
+http_requests_leakage_data:
+                                              site_url  total_leakages  url_leakages  referrer_leakages  headers_leakages  post_body_leakages  post_body_raw_leakages
+                  https://www.ask.com/web?q=JELLYBEANS              84            84                 84                84                   0                       0
+                https://search.seznam.cz/?q=JELLYBEANS              11            11                 11                11                   0                       0
+https://search.naver.com/search.naver?query=JELLYBEANS              11            11                 11                11                   0                       0
+            https://www.sogou.com/web?query=JELLYBEANS               6             6                  6                 6                   0                       0
+              https://www.bing.com/search?q=JELLYBEANS               1             1                  1                 1                   0                       0
+
+javascript_leakage_data:
+                                              site_url  js_value_leakages  total_leakages
+ https://www.startpage.com/do/dsearch?query=JELLYBEANS                354             354
+                  https://www.ask.com/web?q=JELLYBEANS                330             330
+                 https://www.baidu.com/s?wd=JELLYBEANS                300             300
+https://search.naver.com/search.naver?query=JELLYBEANS                  9               9
+
+javascript_cookies_leakage_data:
+                                  site_url  total_leakages  cookie_name_leakages  cookie_path_leakages  cookie_value_leakages
+      https://www.ask.com/web?q=JELLYBEANS              34                    34                    34                     34
+https://yandex.com/search/?text=JELLYBEANS              20                    20                    20                     20
+
+3. Number of leakages per encoding type in each table:
+http_requests_leakage_data:
+          encoding  num_leakages
+          original           102
+original_lowercase            10
+   crc16_lowercase             1
+
+javascript_leakage_data:
+          encoding  num_leakages
+          original           851
+original_lowercase           142
+
+javascript_cookies_leakage_data:
+encoding  num_leakages
+original            54
+

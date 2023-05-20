@@ -29,7 +29,7 @@ SITES = [
 ]
 
 # Search Terms Object
-SEARCH_TERMS = ["JELLYBEANS", "jellybeans"]
+SEARCH_TERMS = ["JELLYBEANS"]
 SEARCH_TERMS_ENCODINGS = Encodings(SEARCH_TERMS)
 
 

@@ -70,7 +70,7 @@ for row in javascript_cookies_leakage:
     leakage_details[site_url]["javascript_cookies"].append(leakage)
 
 # Save the leakage details in JSON format
-with open("results/leakage_unfiltered_breakdown.json", "w") as outfile:
+with open("results/all_leakages.json", "w") as outfile:
     json.dump(leakage_details, outfile, indent=4, sort_keys=True)
 
 # Close the database connection

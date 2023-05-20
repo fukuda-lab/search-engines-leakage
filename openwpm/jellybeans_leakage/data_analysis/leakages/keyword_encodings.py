@@ -14,10 +14,15 @@ class Encodings:
         self.encodings = dict()
         self.search_terms = search_terms
         for keyword in search_terms:
-            self.encodings[keyword] = self._get_keyword_encodings(keyword)
+            self.encodings[keyword] = self.get_original_and_lowercase_encodings(keyword)
 
-    @staticmethod
-    def _get_keyword_encodings(keyword):
+    def get_original_and_lowercase_encodings(self, keyword):
+        keyword_encodings = dict()
+        keyword_encodings["original"] = self._get_keyword_encodings(keyword)
+        keyword_encodings["lowercase"] = self._get_keyword_encodings(keyword.lower())
+        return keyword_encodings
+
+    def _get_keyword_encodings(self, keyword):
         """Returns a list of encodings for a given keyword.
         Bear in mind that there are some encodings that are not reversible, so the original keyword cannot be recovered.
         Also, some encodings used here produce outputs that don't resemble the original keyword which may lead to false positives when searching for the keyword.
