@@ -1,0 +1,49 @@
+1. Total number of leakages found in each table:
+http_requests_leakage_data:
+ num_leakages
+          133
+
+javascript_leakage_data:
+ num_leakages
+          543
+
+javascript_cookies_leakage_data:
+ num_leakages
+            0
+
+2. Total leakages per table breakdown:
+http_requests_leakage_data:
+                                              site_url  total_leakages  url_leakages  referrer_leakages  headers_leakages  post_body_leakages  post_body_raw_leakages
+                  https://www.ask.com/web?q=JELLYBEANS              80            80                 80                80                   0                       0
+            https://www.sogou.com/web?query=JELLYBEANS              22            22                 22                22                   0                       0
+                https://search.seznam.cz/?q=JELLYBEANS              11            11                 11                11                   0                       0
+              https://www.bing.com/search?q=JELLYBEANS              10            10                 10                10                   0                       0
+https://search.naver.com/search.naver?query=JELLYBEANS              10            10                 10                10                   0                       0
+
+javascript_leakage_data:
+                                              site_url  js_value_leakages  total_leakages
+                  https://www.ask.com/web?q=JELLYBEANS                323             323
+                 https://www.baidu.com/s?wd=JELLYBEANS                210             210
+https://search.naver.com/search.naver?query=JELLYBEANS                 10              10
+
+javascript_cookies_leakage_data:
+Empty DataFrame
+Columns: [site_url, total_leakages, cookie_name_leakages, cookie_path_leakages, cookie_value_leakages]
+Index: []
+
+3. Number of leakages per encoding type in each table:
+http_requests_leakage_data:
+          encoding  num_leakages
+          original           123
+original_lowercase            10
+
+javascript_leakage_data:
+          encoding  num_leakages
+          original           439
+original_lowercase           104
+
+javascript_cookies_leakage_data:
+Empty DataFrame
+Columns: [encoding, num_leakages]
+Index: []
+

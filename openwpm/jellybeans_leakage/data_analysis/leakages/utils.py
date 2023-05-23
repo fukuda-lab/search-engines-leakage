@@ -1,7 +1,7 @@
 """ Some utility functions to have tidier code """
 
 
-from keyword_encodings import Encodings
+from data_analysis.leakages.keyword_encodings import Encodings
 
 
 def get_processed_cookie_leakage(row):

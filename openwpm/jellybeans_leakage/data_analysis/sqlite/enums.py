@@ -119,7 +119,10 @@ class LeakageTableCreationCommand(StrEnum):
         document_url TEXT,
         top_level_url TEXT,
         arguments TEXT,
-        encoding TEXT
+        encoding TEXT,
+        top_level_url_second_level_domain TEXT,
+        script_url_second_level_domain TEXT,
+        document_url_second_level_domain TEXT
     );
     """
 
@@ -137,7 +140,9 @@ class LeakageTableCreationCommand(StrEnum):
         value TEXT,
         same_site TEXT,
         first_party_domain TEXT,
-        encoding TEXT
+        encoding TEXT,
+        site_url_second_level_domain TEXT,
+        host_second_level_domain TEXT
     );
     """
 

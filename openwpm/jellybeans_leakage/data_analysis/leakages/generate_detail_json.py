@@ -5,9 +5,11 @@ from pathlib import Path
 import sqlite3
 import json
 from collections import defaultdict
-from sqlite import LeakagesDetailsQueryBySiteURL
-from keyword_encodings import Encodings
-import utils
+
+
+from data_analysis.leakages.sqlite import LeakagesDetailsQueryBySiteURL
+from data_analysis.leakages.keyword_encodings import Encodings
+import data_analysis.leakages.utils as utils
 
 # TODO: Move this to a setting variable for the whole project
 SITES = [
@@ -33,49 +35,50 @@ SEARCH_TERMS = ["JELLYBEANS"]
 SEARCH_TERMS_ENCODINGS = Encodings(SEARCH_TERMS)
 
 
-# We are running this script standing in jellybeans_leakage/data_analysis directory
-LEAKAGE_DATA_PATH = Path("leakages/sqlite/leakage_data.sqlite")
-OUTPUT_PATH = Path("leakages/results/leakages_by_type_and_site_url.json")
+def generate_leakage_details_json(LEAKAGE_DATA_PATH: Path, OUTPUT_PATH: Path):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(LEAKAGE_DATA_PATH)
 
-# Connect to the SQLite database
-conn = sqlite3.connect(LEAKAGE_DATA_PATH)
+    # Organize the leakage data by leakage_type
+    # Really useful defaultdict(lambda: defaultdict(list)),
+    leakage_details = {
+        "cookies_leakages": defaultdict(list),
+        "javascript_leakages": defaultdict(list),
+        "http_requests_leakages": defaultdict(list),
+    }
 
-# Organize the leakage data by leakage_type
-# Really useful defaultdict(lambda: defaultdict(list)),
-leakage_details = {
-    "cookies_leakages": defaultdict(list),
-    "javascript_leakages": defaultdict(list),
-    "http_requests_leakages": defaultdict(list),
-}
+    for site_url in SITES:
+        SITE_QUERIES = LeakagesDetailsQueryBySiteURL(site_url)
 
-for site_url in SITES:
-    SITE_QUERIES = LeakagesDetailsQueryBySiteURL(site_url)
+        # First Cookies Leakages (least frequent)
+        cookies_leakages = conn.execute(SITE_QUERIES.COOKIES).fetchall()
+        for row in cookies_leakages:
+            leakage_list_element = utils.get_processed_cookie_leakage(row)
+            leakage_details["cookies_leakages"][site_url].append(leakage_list_element)
 
-    # First Cookies Leakages (least frequent)
-    cookies_leakages = conn.execute(SITE_QUERIES.COOKIES).fetchall()
-    for row in cookies_leakages:
-        leakage_list_element = utils.get_processed_cookie_leakage(row)
-        leakage_details["cookies_leakages"][site_url].append(leakage_list_element)
+        # Then Javascript Leakages (more frequent)
+        javascript_leakages = conn.execute(SITE_QUERIES.JS).fetchall()
 
-    # Then Javascript Leakages (more frequent)
-    javascript_leakages = conn.execute(SITE_QUERIES.JS).fetchall()
+        for row in javascript_leakages:
+            leakage_list_element = utils.get_processed_javascript_leakage(row)
+            leakage_details["javascript_leakages"][site_url].append(
+                leakage_list_element
+            )
 
-    for row in javascript_leakages:
-        leakage_list_element = utils.get_processed_javascript_leakage(row)
-        leakage_details["javascript_leakages"][site_url].append(leakage_list_element)
+        # Lastly HTTP Requests Leakages (most frequent)
+        http_requests_leakages = conn.execute(SITE_QUERIES.HTTPRequests).fetchall()
+        for row in http_requests_leakages:
+            leakage_list_element = utils.get_processed_http_leakage(
+                row, SEARCH_TERMS_ENCODINGS
+            )
+            leakage_details["http_requests_leakages"][site_url].append(
+                leakage_list_element
+            )
 
-    # Lastly HTTP Requests Leakages (most frequent)
-    http_requests_leakages = conn.execute(SITE_QUERIES.HTTPRequests).fetchall()
-    for row in http_requests_leakages:
-        leakage_list_element = utils.get_processed_http_leakage(
-            row, SEARCH_TERMS_ENCODINGS
-        )
-        leakage_details["http_requests_leakages"][site_url].append(leakage_list_element)
+    # Save the leakage details in JSON format
+    with open(OUTPUT_PATH, "w") as outfile:
+        json.dump(leakage_details, outfile, indent=4, sort_keys=False)
+    print("Document saved in: ", OUTPUT_PATH)
 
-# Save the leakage details in JSON format
-with open(OUTPUT_PATH, "w") as outfile:
-    json.dump(leakage_details, outfile, indent=4, sort_keys=False)
-print("Document saved in: ", OUTPUT_PATH)
-
-# Close the database connection
-conn.close()
+    # Close the database connection
+    conn.close()
