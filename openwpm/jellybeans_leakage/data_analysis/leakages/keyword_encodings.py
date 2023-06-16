@@ -62,8 +62,9 @@ class Encodings:
         encodings["base64"] = base64.b64encode(utf_8_encoded_keyword).decode()
 
         # Compression algorithms (false-positive risky)
-        encodings["gzip"] = gzip.compress(utf_8_encoded_keyword).decode(errors="ignore")
-        encodings["bzip2"] = bz2.compress(utf_8_encoded_keyword).decode(errors="ignore")
+        # Disabled because they are giving trouble
+        # encodings["gzip"] = gzip.compress(utf_8_encoded_keyword).decode(errors="ignore")
+        # encodings["bzip2"] = bz2.compress(utf_8_encoded_keyword).decode(errors="ignore")
         encodings["deflate"] = _deflate(utf_8_encoded_keyword)
 
         # Hash functions (false-positive risky)

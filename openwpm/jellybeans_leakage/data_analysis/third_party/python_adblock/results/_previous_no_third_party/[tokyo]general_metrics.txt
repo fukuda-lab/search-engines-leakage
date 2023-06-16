@@ -1,0 +1,33 @@
+Total number of matches for each ruleset in each table
+http_requests_abp:
+ total  easylist  easyprivacy  exceptionlist
+  1377       164         1213            326
+
+javascripts_abp:
+ total  easylist  easyprivacy  exceptionlist
+  2305      1113         1192            325
+
+Number of matches for each ruleset for each site_url in each table
+http_requests_abp:
+                                              site_url  total  easylist  easyprivacy  exceptionlist
+              https://www.bing.com/search?q=JELLYBEANS    340         0          340              0
+                  https://www.ask.com/web?q=JELLYBEANS    287        70          217             50
+            https://yandex.com/search/?text=JELLYBEANS    216         9          207              0
+                  https://duckduckgo.com/?q=JELLYBEANS    122         0          122            122
+            https://www.google.com/search?q=JELLYBEANS    118        20           98             97
+ https://www.startpage.com/do/dsearch?query=JELLYBEANS     75        65           10             57
+                 https://www.baidu.com/s?wd=JELLYBEANS     60         0           60              0
+            https://www.sogou.com/web?query=JELLYBEANS     49         0           49              0
+https://search.naver.com/search.naver?query=JELLYBEANS     40         0           40              0
+          https://search.yahoo.com/search?p=JELLYBEANS     21         0           21              0
+                   https://www.qwant.com/?q=JELLYBEANS     20         0           20              0
+                https://search.seznam.cz/?q=JELLYBEANS     19         0           19              0
+        https://search.aol.com/aol/search?q=JELLYBEANS     10         0           10              0
+
+javascripts_abp:
+                                              site_url  total  easylist  easyprivacy  exceptionlist
+                https://search.seznam.cz/?q=JELLYBEANS    732         0          732              0
+ https://www.startpage.com/do/dsearch?query=JELLYBEANS    614       614            0              0
+                  https://www.ask.com/web?q=JELLYBEANS    499       499            0            325
+https://search.naver.com/search.naver?query=JELLYBEANS    460         0          460              0
+

@@ -1,0 +1,22 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test_abp_filter_parser.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "abp-filter-parser": "^0.2.0",
+    "adblock-rs": "^0.7.9",
+    "adblock-rust": "^9.0.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "sqlite": "^4.2.1",
+    "sqlite3": "^5.1.6",
+    "tld-extract": "^2.1.0"
+  }
+}

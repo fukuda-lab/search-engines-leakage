@@ -1,0 +1,33 @@
+Total number of matches for each ruleset in each table
+http_requests_abp:
+ total  easylist  easyprivacy  exceptionlist
+  1197       140         1057            345
+
+javascripts_abp:
+ total  easylist  easyprivacy  exceptionlist
+  2135      1303          832            389
+
+Number of matches for each ruleset for each site_url in each table
+http_requests_abp:
+                                              site_url  total  easylist  easyprivacy  exceptionlist
+                  https://www.ask.com/web?q=JELLYBEANS    256        70          186             50
+            https://yandex.com/search/?text=JELLYBEANS    179         2          177              0
+              https://www.bing.com/search?q=JELLYBEANS    165         0          165              0
+            https://www.google.com/search?q=JELLYBEANS    132         7          125            112
+                  https://duckduckgo.com/?q=JELLYBEANS    128         0          128            128
+                 https://www.baidu.com/s?wd=JELLYBEANS     74         0           74              0
+ https://www.startpage.com/do/dsearch?query=JELLYBEANS     71        61           10             55
+            https://www.sogou.com/web?query=JELLYBEANS     68         0           68              0
+                   https://www.qwant.com/?q=JELLYBEANS     40         0           40              0
+https://search.naver.com/search.naver?query=JELLYBEANS     40         0           40              0
+          https://search.yahoo.com/search?p=JELLYBEANS     20         0           20              0
+                https://search.seznam.cz/?q=JELLYBEANS     14         0           14              0
+        https://search.aol.com/aol/search?q=JELLYBEANS     10         0           10              0
+
+javascripts_abp:
+                                              site_url  total  easylist  easyprivacy  exceptionlist
+ https://www.startpage.com/do/dsearch?query=JELLYBEANS    782       782            0              0
+                  https://www.ask.com/web?q=JELLYBEANS    566       521           45            389
+https://search.naver.com/search.naver?query=JELLYBEANS    458         0          458              0
+                https://search.seznam.cz/?q=JELLYBEANS    329         0          329              0
+

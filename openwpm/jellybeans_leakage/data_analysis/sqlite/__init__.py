@@ -5,4 +5,6 @@ from .enums import (
     LeakageDataQueries,
     ColumnsToSearch,
     LeakageTableNames,
+    DetailsQueryBySiteURL,
+    ThirdPartyTableCreationCommand,
 )

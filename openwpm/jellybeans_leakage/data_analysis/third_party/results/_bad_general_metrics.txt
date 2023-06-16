@@ -1,0 +1,27 @@
+Total number of matches for each ruleset in each table
+http_requests_abp:
+ easylist  easyprivacy  exceptionlist
+  90         231            70
+
+javascripts_abp:
+ easylist  easyprivacy  exceptionlist
+  1113         1192            325
+
+Number of matches for each ruleset for each site_url in each table
+http_requests_abp:
+                                                        original_id  easylist  easyprivacy  exceptionlist
+site_url                                                                                                 
+https://search.naver.com/search.naver?query=JELLYBEANS       137631         0           20              0
+https://search.seznam.cz/?q=JELLYBEANS                        70253         0           10              0
+https://search.yahoo.com/search?p=JELLYBEANS                  64889         0           10              0
+https://www.ask.com/web?q=JELLYBEANS                        1782187        70          180             50
+https://www.google.com/search?q=JELLYBEANS                   121649        20            0             20
+https://www.sogou.com/web?query=JELLYBEANS                    60749         0           11              0
+
+javascripts_abp:
+                                                        original_id  easylist  easyprivacy  exceptionlist
+site_url                                                                                                 
+https://search.naver.com/search.naver?query=JELLYBEANS      5363876         0          460              0
+https://search.seznam.cz/?q=JELLYBEANS                      9565592         0          732              0
+https://www.ask.com/web?q=JELLYBEANS                        6121915       499            0            325
+https://www.startpage.com/do/dsearch?query=JELLYBEANS       7637921       614            0              0
